@@ -54,4 +54,18 @@ public class XMLNode {
     public void setParent(XMLNode parent) {
         this.parent = parent;
     }
+
+
+    // my methods:
+
+    public void setAttributes(Map<String, String> attributes) {
+        this.attributes = attributes;
+    }
+
+    public XMLNode() {
+    }
+
+    public void setTagName(String tagName) {
+        this.tagName = tagName;
+    }
 }

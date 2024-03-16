@@ -1,9 +1,11 @@
 package hk.ust.comp3021.utils;
 
-import java.io.BufferedReader;
-import java.io.File;
+import org.jetbrains.annotations.NotNull;
+
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class ASTParser {
@@ -63,34 +65,36 @@ public class ASTParser {
     public void parse2XMLNode() {
         // TODO: complete the definition of the method `parse2XMLNode`
         try {
-            FileReader reader = new FileReader("python_" + this.xmlFileID + ".xml");
-            BufferedReader br = new BufferedReader(reader); // Use BufferedReader to read line by line (don't use scanner cuz it doesn't move the next line)
+            FileReader reader = new FileReader("resources/pythonxml/python_" + this.xmlFileID + ".xml");
+            Scanner sc = new Scanner(reader);
             String line;
-            XMLNode curNode; // need to keep track of the hierarchy (pre / cur node)
-            while ((line = br.readLine()) != null) {
+            XMLNode curNode = new XMLNode();
+            while (sc.hasNextLine()) {
                 // case 0: ast
+                line = sc.nextLine().trim();
                 if (line.equals("<ast>")) {
-                    this.rootXMLNode = new XMLNode("ast");
-                    curNode = this.rootXMLNode;
+                    curNode = new XMLNode("<ast>");
+                    this.rootXMLNode = curNode;
                 }
                 // case 1: <tag> node
-                else if (line.startsWith("<") && !line.startsWith("</")) {
-                    // separate the line into segments and then create new node
-                    String[] segments = line.split(" ");
-                    XMLNode node = new XMLNode(segments[0].substring(1, segments[0].length() - 1)); // remove <
-                    // add attributes
-                    for (int i = 1; i < segments.length; ++i)
-                    {
-                        String[] attr = segments[i].split("=");
-                        node.getAttributes().put(attr[0], attr[1].substring(1, attr[1].length() - 1)); // remove " and =
-                    }
-                    this.rootXMLNode.addChild(node);
+                else if (line.startsWith("<") && !line.startsWith("</") && !line.endsWith("/>")) {
+                    XMLNode nextNode = getXMLNodeFromLine(line);
+                    curNode.addChild(nextNode);
+                    curNode = nextNode;
                 }
                 // case 3: <tag/>
+                else if (line.startsWith("<") && line.endsWith("/>")) {
+                    XMLNode nextNode = new XMLNode(line.substring(1, line.length() - 2));
+                    curNode.addChild((nextNode));
+                }
                 // case 4: </tag>
+                else if (line.startsWith("</")) {
+                    curNode = curNode.getParent();
+                }
             }
 
         } catch (IOException e) {
+            System.out.println("File-open failed");
             isErr = true;
         }
     }
@@ -104,5 +108,51 @@ public class ASTParser {
      */
     public void yourMethod() {
 
+    }
+
+    @NotNull
+    private static XMLNode getXMLNodeFromLine(String line) {
+        String[] segments = line.split(" ");
+        XMLNode nextNode;
+        Map<String, String> attrs = new HashMap<>();
+        if (segments.length == 1) // <> only
+            nextNode = new XMLNode(segments[0].substring(1, segments[0].length() - 1)); // remove <>
+        else // <tag attr= ...>
+            nextNode = new XMLNode(segments[0].substring(1)); // remove <
+        for (int i = 1; i < segments.length; ++i) {
+            String[] attr = segments[i].split("=");
+            if (attr[1].charAt(attr[1].length() - 1) == '>') {
+                attrs.put(attr[0], attr[1].substring(1, attr[1].length() - 2));
+                break;
+            } else {
+                attrs.put(attr[0], attr[1].substring(1, attr[1].length() - 1));
+            }
+        }
+        nextNode.setAttributes(attrs);
+        return nextNode;
+    }
+
+    public String getXmlFileID() {
+        return xmlFileID;
+    }
+
+    public void setErr(boolean err) {
+        isErr = err;
+    }
+
+    public XMLNode getRootXMLNode() {
+        return rootXMLNode;
+    }
+
+    public void setRootXMLNode(XMLNode rootXMLNode) {
+        this.rootXMLNode = rootXMLNode;
+    }
+
+    public ASTModule getRootASTModule() {
+        return rootASTModule;
+    }
+
+    public void setRootASTModule(ASTModule rootASTModule) {
+        this.rootASTModule = rootASTModule;
     }
 }
