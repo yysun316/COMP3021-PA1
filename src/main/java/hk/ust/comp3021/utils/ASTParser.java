@@ -68,27 +68,24 @@ public class ASTParser {
             FileReader reader = new FileReader("resources/pythonxml/python_" + this.xmlFileID + ".xml");
             Scanner sc = new Scanner(reader);
             String line;
-            XMLNode curNode = new XMLNode();
+            XMLNode curNode = new XMLNode(); // useless tmp node
             while (sc.hasNextLine()) {
                 // case 0: ast
                 line = sc.nextLine().trim();
                 if (line.equals("<ast>")) {
-                    curNode = new XMLNode("<ast>");
+                    curNode = new XMLNode("ast");
                     this.rootXMLNode = curNode;
                 }
-                // case 1: <tag> node
-                else if (line.startsWith("<") && !line.startsWith("</") && !line.endsWith("/>")) {
+                // case 1: <tag> node or <tag />
+                else if (!line.startsWith("</")) {
                     XMLNode nextNode = getXMLNodeFromLine(line);
                     curNode.addChild(nextNode);
                     curNode = nextNode;
+                    if (line.endsWith("/>"))
+                        curNode = curNode.getParent();
                 }
-                // case 3: <tag/>
-                else if (line.startsWith("<") && line.endsWith("/>")) {
-                    XMLNode nextNode = new XMLNode(line.substring(1, line.length() - 2));
-                    curNode.addChild((nextNode));
-                }
-                // case 4: </tag>
-                else if (line.startsWith("</")) {
+                // case 2: </tag>
+                else {
                     curNode = curNode.getParent();
                 }
             }
@@ -115,13 +112,19 @@ public class ASTParser {
         String[] segments = line.split(" ");
         XMLNode nextNode;
         Map<String, String> attrs = new HashMap<>();
-        if (segments.length == 1) // <> only
+        if (segments.length == 1 && !segments[0].endsWith("/>")) // <> only
             nextNode = new XMLNode(segments[0].substring(1, segments[0].length() - 1)); // remove <>
+        else if (segments.length == 1 && segments[0].endsWith("/>"))
+            nextNode = new XMLNode(segments[0].substring(1, segments[0].length() - 2)); // remove </>
         else // <tag attr= ...>
             nextNode = new XMLNode(segments[0].substring(1)); // remove <
         for (int i = 1; i < segments.length; ++i) {
             String[] attr = segments[i].split("=");
-            if (attr[1].charAt(attr[1].length() - 1) == '>') {
+            if (attr[1].endsWith("/>")) {
+                attrs.put(attr[0], attr[1].substring(1, attr[1].length() - 3));
+                break;
+            }
+            else if (attr[1].endsWith(">")) {
                 attrs.put(attr[0], attr[1].substring(1, attr[1].length() - 2));
                 break;
             } else {
