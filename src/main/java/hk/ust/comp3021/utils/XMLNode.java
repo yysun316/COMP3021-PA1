@@ -63,6 +63,10 @@ public class XMLNode {
     }
 
     public XMLNode() {
+        tagName = null;
+        attributes = new HashMap<>();
+        children = new ArrayList<>();
+        parent = null;
     }
 
     public void setTagName(String tagName) {

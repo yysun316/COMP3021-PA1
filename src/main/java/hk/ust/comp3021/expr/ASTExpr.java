@@ -2,6 +2,7 @@ package hk.ust.comp3021.expr;
 
 import hk.ust.comp3021.misc.*;
 import hk.ust.comp3021.utils.*;
+import org.w3c.dom.Attr;
 
 public abstract class ASTExpr extends ASTElement {
     enum ExprType {
@@ -30,7 +31,21 @@ public abstract class ASTExpr extends ASTElement {
      */
     public static ASTExpr createASTExpr(XMLNode node) {
         // TODO: complete the definition of the method `createASTExpr`
-        return null;
+        String tagName = node.getTagName();
+        return switch(tagName) {
+            case "Attribute" -> new AttributeExpr(node);
+            case "BinOp" -> new BinOpExpr(node);
+            case "BoolOp" -> new BoolOpExpr(node);
+            case "Call" -> new CallExpr(node);
+            case "Compare" -> new CompareExpr(node);
+            case "Constant" -> new ConstantExpr(node);
+            case "List" -> new ListExpr(node);
+            case "Name" -> new NameExpr(node);
+            case "Subscript" -> new SubscriptExpr(node);
+            case "Tuple" -> new TupleExpr(node);
+            case "UnaryOp" -> new UnaryOpExpr(node);
+            default -> throw new IllegalStateException("Unexpected value: " + tagName + " Check ASTExpr for typo");
+        };
     }
 
     /**

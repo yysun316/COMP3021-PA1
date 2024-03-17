@@ -2,6 +2,7 @@ package hk.ust.comp3021.expr;
 
 import hk.ust.comp3021.misc.*;
 import hk.ust.comp3021.utils.*;
+
 import java.util.*;
 
 public class CallExpr extends ASTExpr {
@@ -13,6 +14,12 @@ public class CallExpr extends ASTExpr {
     public CallExpr(XMLNode node) {
         // TODO: complete the definition of the constructor. Define the class as the subclass of ASTExpr.
         super(node);
+        this.exprType = ASTExpr.ExprType.Call;
+        this.func = ASTExpr.createASTExpr(node.getChildByIdx(0));
+        for (XMLNode argNode : node.getChildByIdx(1).getChildren())
+            this.args.add(ASTExpr.createASTExpr(argNode));
+        for (XMLNode keywordNode : node.getChildByIdx(2).getChildren())
+            this.keywords.add(new ASTKeyWord(keywordNode));
     }
 
     /*
@@ -30,8 +37,13 @@ public class CallExpr extends ASTExpr {
     @Override
     public ArrayList<ASTElement> getChildren() {
         // TODO: complete the definition of the method `getChildren`
-        return null;
+        ArrayList<ASTElement> children = new ArrayList<>();
+        children.add(this.func);
+        children.addAll(this.args);
+        children.addAll(this.keywords);
+        return children;
     }
+
     @Override
     public int countChildren() {
         // TODO: complete the definition of the method `countChildren`

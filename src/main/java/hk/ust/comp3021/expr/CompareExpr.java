@@ -14,12 +14,21 @@ public class CompareExpr extends ASTExpr {
     public CompareExpr(XMLNode node) {
         // TODO: complete the definition of the constructor. Define the class as the subclass of ASTExpr.
         super(node);
+        this.exprType = ASTExpr.ExprType.Compare;
+        this.left = ASTExpr.createASTExpr(node.getChildByIdx(0));
+        for (XMLNode opNode : node.getChildByIdx(1).getChildren())
+            this.ops.add(new ASTEnumOp(opNode));
+        for (XMLNode comparatorNode : node.getChildByIdx(2).getChildren())
+            this.comparators.add(ASTExpr.createASTExpr(comparatorNode));
     }
 
     @Override
     public ArrayList<ASTElement> getChildren() {
         // TODO: complete the definition of the method `getChildren`
-        return null;
+        ArrayList<ASTElement> children = new ArrayList<>();
+        children.add(this.left);
+        children.addAll(this.comparators);
+        return children;
     }
 
     @Override

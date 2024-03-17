@@ -13,12 +13,19 @@ public class AssignStmt extends ASTStmt {
     public AssignStmt(XMLNode node) {
         // TODO: complete the definition of the constructor. Define the class as the subclass of ASTStmt.
         super(node);
+        this.stmtType = ASTStmt.StmtType.Assign;
+        this.value = ASTExpr.createASTExpr(node.getChildByIdx(1));
+        for (XMLNode child : node.getChildByIdx(0).getChildren()) {
+            this.targets.add(ASTExpr.createASTExpr(child));
+        }
     }
 
     @Override
     public ArrayList<ASTElement> getChildren() {
         // TODO: complete the definition of the method `getChildren`
-        return null;
+        ArrayList<ASTElement> children = new ArrayList<>(targets);
+        children.add(value);
+        return children;
     }
 
     @Override
@@ -26,6 +33,7 @@ public class AssignStmt extends ASTStmt {
         // TODO: complete the definition of the method `countChildren`
         return 0;
     }
+
     @Override
     public void printByPos(StringBuilder str) {
         // TODO: (Bonus) complete the definition of the method `printByPos`

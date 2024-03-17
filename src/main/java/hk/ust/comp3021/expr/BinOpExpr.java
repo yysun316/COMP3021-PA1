@@ -13,12 +13,19 @@ public class BinOpExpr extends ASTExpr {
     public BinOpExpr(XMLNode node) {
         // TODO: complete the definition of the constructor. Define the class as the subclass of ASTExpr.
         super(node);
+        this.exprType = ASTExpr.ExprType.BinOp;
+        this.left = ASTExpr.createASTExpr(node.getChildByIdx(0));
+        this.op = new ASTEnumOp(node.getChildByIdx(1));
+        this.right = ASTExpr.createASTExpr(node.getChildByIdx(2));
     }
 
     @Override
     public ArrayList<ASTElement> getChildren() {
         // TODO: complete the definition of the method `getChildren`
-        return null;
+        ArrayList<ASTElement> children = new ArrayList<>();
+        children.add(this.left);
+        children.add(this.right);
+        return children;
     }
 
     @Override

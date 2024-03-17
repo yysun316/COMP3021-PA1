@@ -2,7 +2,9 @@ package hk.ust.comp3021.utils;
 
 import hk.ust.comp3021.misc.*;
 import hk.ust.comp3021.stmt.*;
+
 import java.util.*;
+import java.util.function.Function;
 
 
 public class ASTModule extends ASTElement {
@@ -15,20 +17,42 @@ public class ASTModule extends ASTElement {
 
         this.body = new ArrayList<>();
         for (XMLNode bodyNode : node.getChildByIdx(0).getChildren()) {
+            System.out.println(bodyNode);
             this.body.add(ASTStmt.createASTStmt(bodyNode));
         }
     }
 
     /*
-    * Find all AST node whose class type is `FunctionDefStmt` shown in the AST
-    * Hints: you need to traverse all the nodes in AST and check its class type.
-    * We have prepared the method `getChildren` for you to ease the traversal.
-    * You may need to remove the `return null` in the skeleton.
-    * */
+     * Find all AST node whose class type is `FunctionDefStmt` shown in the AST
+     * Hints: you need to traverse all the nodes in AST and check its class type.
+     * We have prepared the method `getChildren` for you to ease the traversal.
+     * You may need to remove the `return null` in the skeleton.
+     * */
     public ArrayList<FunctionDefStmt> getAllFunctions() {
         // TODO: complete the definition of the method `getAllFunctions`
-        return null;
+        ArrayList<FunctionDefStmt> result = new ArrayList<>();
+        Queue<ASTElement> visited = new LinkedList<>();
+
+        for (ASTStmt curStmt : this.body)
+            bfsFunctionDef(visited, curStmt, result);
+
+        return result;
     }
+
+    private static void bfsFunctionDef(Queue<ASTElement> visited, ASTElement curStmt, ArrayList<FunctionDefStmt> result) {
+        if (curStmt == null) return;
+        visited.add(curStmt);
+        while (!visited.isEmpty()){
+            ASTElement tmp = visited.poll();
+
+            if (tmp instanceof ASTStmt && tmp.getNodeType().equals("FunctionDef"))
+                result.add((FunctionDefStmt) tmp);
+
+            if (tmp.getChildren() != null && !tmp.getChildren().isEmpty())
+                visited.addAll(tmp.getChildren());
+        }
+    }
+
 
     /*
      * Find all operators whose class type is `ASTEnumOp` shown in the AST.
@@ -89,5 +113,21 @@ public class ASTModule extends ASTElement {
      */
     public void yourMethod() {
 
+    }
+
+    public ArrayList<ASTStmt> getBody() {
+        return body;
+    }
+
+    public void setBody(ArrayList<ASTStmt> body) {
+        this.body = body;
+    }
+
+    public String getAstID() {
+        return astID;
+    }
+
+    public void setAstID(String astID) {
+        this.astID = astID;
     }
 }

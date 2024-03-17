@@ -12,12 +12,16 @@ public class BoolOpExpr extends ASTExpr {
     public BoolOpExpr(XMLNode node) {
         // TODO: complete the definition of the constructor. Define the class as the subclass of ASTExpr.
         super(node);
+        this.exprType = ASTExpr.ExprType.BoolOp;
+        this.op = new ASTEnumOp(node.getChildByIdx(0));
+        for (XMLNode valueNode : node.getChildByIdx(1).getChildren())
+            this.values.add(ASTExpr.createASTExpr(valueNode));
     }
 
     @Override
     public ArrayList<ASTElement> getChildren() {
         // TODO: complete the definition of the method `getChildren`
-        return null;
+        return new ArrayList<>(this.values);
     }
     @Override
     public int countChildren() {

@@ -12,12 +12,15 @@ public class NameExpr extends ASTExpr {
     public NameExpr(XMLNode node)  {
         // TODO: complete the definition of the constructor. Define the class as the subclass of ASTExpr.
         super(node);
+        this.exprType = ASTExpr.ExprType.Name;
+        this.id = node.getAttribute("id");
+        this.ctx = new ASTEnumOp(node.getChildByIdx(0));
     }
 
     @Override
     public ArrayList<ASTElement> getChildren() {
         // TODO: complete the definition of the method `getChildren`
-        return null;
+        return new ArrayList<>();
     }
     @Override
     public int countChildren() {

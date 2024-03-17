@@ -14,12 +14,19 @@ public class AugAssignStmt extends ASTStmt {
     public AugAssignStmt(XMLNode node) {
         // TODO: complete the definition of the constructor. Define the class as the subclass of ASTExpr.
         super(node);
+        this.stmtType = ASTStmt.StmtType.AugAssign;
+        this.target = ASTExpr.createASTExpr(node.getChildByIdx(0));
+        this.op = new ASTEnumOp(node.getChildByIdx(1));
+        this.value = ASTExpr.createASTExpr(node.getChildByIdx(2));
     }
 
     @Override
     public ArrayList<ASTElement> getChildren() {
         // TODO: complete the definition of the method `getChildren`
-        return null;
+        ArrayList<ASTElement> children = new ArrayList<>();
+        children.add(target);
+        children.add(value);
+        return children;
     }
     @Override
     public int countChildren() {

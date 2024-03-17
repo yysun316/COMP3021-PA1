@@ -12,6 +12,10 @@ public class TupleExpr extends ASTExpr {
     public TupleExpr(XMLNode node) {
         // TODO: complete the definition of the constructor. Define the class as the subclass of ASTExpr.
         super(node);
+        this.exprType = ASTExpr.ExprType.Tuple;
+        for (XMLNode eltNode : node.getChildByIdx(0).getChildren())
+            this.elts.add(ASTExpr.createASTExpr(eltNode));
+        this.ctx = new ASTEnumOp(node.getChildByIdx(1));
     }
 
     @Override
@@ -22,7 +26,7 @@ public class TupleExpr extends ASTExpr {
     @Override
     public ArrayList<ASTElement> getChildren() {
         // TODO: complete the definition of the method `getChildren`
-        return null;
+        return new ArrayList<>(this.elts);
     }
 
     @Override

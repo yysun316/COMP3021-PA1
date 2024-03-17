@@ -3,6 +3,8 @@ package hk.ust.comp3021.stmt;
 import hk.ust.comp3021.expr.*;
 import hk.ust.comp3021.misc.*;
 import hk.ust.comp3021.utils.*;
+
+import java.sql.Array;
 import java.util.*;
 
 public class FunctionDefStmt extends ASTStmt {
@@ -19,6 +21,15 @@ public class FunctionDefStmt extends ASTStmt {
     public FunctionDefStmt(XMLNode node) {
         // TODO: complete the definition of the constructor. Define the class as the subclass of ASTExpr.
         super(node);
+        this.stmtType = ASTStmt.StmtType.FunctionDef;
+        this.name = node.getAttribute("name");
+        this.args = new ASTArguments(node.getChildByIdx(0));
+        for (XMLNode child : node.getChildByIdx(1).getChildren())
+            this.body.add(ASTStmt.createASTStmt(child));
+        for (XMLNode child : node.getChildByIdx(2).getChildren())
+            this.decoratorList.add(ASTExpr.createASTExpr(child));
+        if (!node.hasAttribute("returns"))
+            this.returns = ASTExpr.createASTExpr(node.getChildByIdx(3));
     }
 
     /*
@@ -43,7 +54,13 @@ public class FunctionDefStmt extends ASTStmt {
     @Override
     public ArrayList<ASTElement> getChildren() {
         // TODO: complete the definition of the method `getChildren`
-        return null;
+        ArrayList<ASTElement> children = new ArrayList<>();
+        children.add(args);
+        children.addAll(body);
+        children.addAll(decoratorList);
+        if (returns != null)
+            children.add(returns);
+        return children;
     }
     @Override
     public int countChildren() {

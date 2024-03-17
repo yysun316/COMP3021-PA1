@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ASTParser {
     private final String xmlFileID;
@@ -64,12 +66,13 @@ public class ASTParser {
      */
     public void parse2XMLNode() {
         // TODO: complete the definition of the method `parse2XMLNode`
-        try {
-            FileReader reader = new FileReader("resources/pythonxml/python_" + this.xmlFileID + ".xml");
+        int cnt = 0;
+        try (FileReader reader = new FileReader("resources/pythonxml/python_" + this.xmlFileID + ".xml")) {
             Scanner sc = new Scanner(reader);
             String line;
             XMLNode curNode = new XMLNode(); // useless tmp node
             while (sc.hasNextLine()) {
+                System.out.println(cnt++);
                 // case 0: ast
                 line = sc.nextLine().trim();
                 if (line.equals("<ast>")) {
@@ -85,15 +88,22 @@ public class ASTParser {
                         curNode = curNode.getParent();
                 }
                 // case 2: </tag>
-                else {
+                else if (line.startsWith("</"))
                     curNode = curNode.getParent();
+                else {
+
                 }
             }
-
         } catch (IOException e) {
-            System.out.println("File-open failed");
+//            System.out.println("File-open failed");
             isErr = true;
+//            System.out.println("line number is" + e.getStackTrace()[0].getLineNumber());
+        } catch (Exception e) {
+            System.out.println("Exception");
+            isErr = true;
+            System.out.println("File: " + xmlFileID + " line number is" + cnt);
         }
+
     }
 
     /**
@@ -109,27 +119,26 @@ public class ASTParser {
 
     @NotNull
     private static XMLNode getXMLNodeFromLine(String line) {
-        String[] segments = line.split(" ");
-        XMLNode nextNode;
+        XMLNode nextNode = new XMLNode();
+        String tagNameRegex = "<(\\w+)"; // <tag (can be any word)
+        String attrRegex = "(\\w+)=\"(.*?)\""; // attr="value" attribute value can be any string
+
+        Pattern tagNamePattern = Pattern.compile(tagNameRegex);
+        Matcher tagNameMatcher = tagNamePattern.matcher(line);
+
+        if (tagNameMatcher.find()) {
+            nextNode.setTagName(tagNameMatcher.group(1));
+            System.out.println("Tag name: " + nextNode.getTagName());
+        } else {
+            throw new IllegalArgumentException("No tag name found");
+        }
+        Pattern attrPattern = Pattern.compile(attrRegex);
+        Matcher attrMatcher = attrPattern.matcher(line);
         Map<String, String> attrs = new HashMap<>();
-        if (segments.length == 1 && !segments[0].endsWith("/>")) // <> only
-            nextNode = new XMLNode(segments[0].substring(1, segments[0].length() - 1)); // remove <>
-        else if (segments.length == 1 && segments[0].endsWith("/>"))
-            nextNode = new XMLNode(segments[0].substring(1, segments[0].length() - 2)); // remove </>
-        else // <tag attr= ...>
-            nextNode = new XMLNode(segments[0].substring(1)); // remove <
-        for (int i = 1; i < segments.length; ++i) {
-            String[] attr = segments[i].split("=");
-            if (attr[1].endsWith("/>")) {
-                attrs.put(attr[0], attr[1].substring(1, attr[1].length() - 3));
-                break;
-            }
-            else if (attr[1].endsWith(">")) {
-                attrs.put(attr[0], attr[1].substring(1, attr[1].length() - 2));
-                break;
-            } else {
-                attrs.put(attr[0], attr[1].substring(1, attr[1].length() - 1));
-            }
+        while (attrMatcher.find()) {
+            attrs.put(attrMatcher.group(1), attrMatcher.group(2));
+            System.out.println("Attribute name: " + attrMatcher.group(1));
+            System.out.println("Attribute value: " + attrMatcher.group(2));
         }
         nextNode.setAttributes(attrs);
         return nextNode;

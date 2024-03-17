@@ -2,6 +2,8 @@ package hk.ust.comp3021.misc;
 
 import hk.ust.comp3021.expr.*;
 import hk.ust.comp3021.utils.*;
+
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class ASTArguments extends ASTElement {
@@ -16,12 +18,18 @@ public class ASTArguments extends ASTElement {
         public ASTArg(XMLNode node) {
             // TODO: complete the definition of the constructor. Define the class as the subclass of ASTElement.
             super(node);
+            this.arg = node.getAttribute("arg");
+            if (!node.hasAttribute("annotation"))
+                this.annotation = ASTExpr.createASTExpr(node.getChildByIdx(0));
         }
 
         @Override
         public ArrayList<ASTElement> getChildren() {
             // TODO: complete the definition of the method `getChildren`
-            return null;
+            ArrayList<ASTElement> children = new ArrayList<>();
+            if (this.annotation != null)
+                children.add(this.annotation);
+            return children;
         }
 
         @Override
@@ -60,7 +68,11 @@ public class ASTArguments extends ASTElement {
 
     public ASTArguments(XMLNode node) {
         // TODO: complete the definition of the constructor. Define the class as the subclass of ASTElement.
-        super(node);
+        super(node); // do we need other fields?
+        for (XMLNode argsChild : node.getChildByIdx(1).getChildren())
+            args.add(new ASTArg(argsChild));
+        for (XMLNode defaultsChild : node.getChildByIdx(4).getChildren())
+            defaults.add(ASTExpr.createASTExpr(defaultsChild));
     }
 
 
@@ -69,13 +81,16 @@ public class ASTArguments extends ASTElement {
     */
     public int getParamNum() {
         // TODO: complete the definition of the method `getParamNum`
-        return 0;
+        return args.size();
     }
 
     @Override
     public ArrayList<ASTElement> getChildren() {
         // TODO: complete the definition of the method `getChildren`
-        return null;
+        ArrayList<ASTElement> children = new ArrayList<>();
+        children.addAll(args);
+        children.addAll(defaults);
+        return children;
     }
 
     @Override

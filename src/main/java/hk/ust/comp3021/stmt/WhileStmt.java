@@ -14,12 +14,22 @@ public class WhileStmt extends ASTStmt {
     public WhileStmt(XMLNode node) {
         // TODO: complete the definition of the constructor. Define the class as the subclass of ASTExpr.
         super(node);
+        this.stmtType = ASTStmt.StmtType.While;
+        this.test = ASTExpr.createASTExpr(node.getChildByIdx(0));
+        for (XMLNode child : node.getChildByIdx(1).getChildren())
+            this.body.add(ASTStmt.createASTStmt(child));
+        for (XMLNode child : node.getChildByIdx(2).getChildren())
+            this.orelse.add(ASTStmt.createASTStmt(child));
     }
 
     @Override
     public ArrayList<ASTElement> getChildren() {
         // TODO: complete the definition of the method `getChildren`
-        return null;
+        ArrayList<ASTElement> children = new ArrayList<>();
+        children.add(test);
+        children.addAll(body);
+        children.addAll(orelse);
+        return children;
     }
 
     @Override

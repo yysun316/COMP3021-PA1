@@ -2,6 +2,7 @@ package hk.ust.comp3021.misc;
 
 import hk.ust.comp3021.expr.*;
 import hk.ust.comp3021.utils.*;
+
 import java.util.*;
 
 public class ASTKeyWord extends ASTElement {
@@ -15,12 +16,17 @@ public class ASTKeyWord extends ASTElement {
     public ASTKeyWord(XMLNode node) {
         // TODO: complete the definition of the constructor. Define the class as the subclass of ASTElement.
         super(node);
+        if (node.hasAttribute("arg"))
+            this.arg = node.getAttribute("arg");
+        this.value = ASTExpr.createASTExpr(node.getChildByIdx(0));
     }
 
     @Override
     public ArrayList<ASTElement> getChildren() {
         // TODO: complete the definition of the method `getChildren`
-        return null;
+        ArrayList<ASTElement> children = new ArrayList<>();
+        children.add(this.value);
+        return children;
     }
 
     @Override

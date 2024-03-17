@@ -15,12 +15,24 @@ public class ForStmt extends ASTStmt {
     public ForStmt(XMLNode node) {
         // TODO: complete the definition of the constructor. Define the class as the subclass of ASTExpr.
         super(node);
+        this.stmtType = ASTStmt.StmtType.For;
+        this.target = ASTExpr.createASTExpr(node.getChildByIdx(0));
+        this.iter = ASTExpr.createASTExpr(node.getChildByIdx(1));
+        for (XMLNode child : node.getChildByIdx(2).getChildren())
+            this.body.add(ASTStmt.createASTStmt(child));
+        for (XMLNode child : node.getChildByIdx(3).getChildren())
+            this.orelse.add(ASTStmt.createASTStmt(child));
     }
 
     @Override
     public ArrayList<ASTElement> getChildren() {
         // TODO: complete the definition of the method `getChildren`
-        return null;
+        ArrayList<ASTElement> children = new ArrayList<>();
+        children.add(target);
+        children.add(iter);
+        children.addAll(body);
+        children.addAll(orelse);
+        return children;
     }
     @Override
     public int countChildren() {

@@ -12,6 +12,10 @@ public class ConstantExpr extends ASTExpr {
     public ConstantExpr(XMLNode node) {
         // TODO: complete the definition of the constructor. Define the class as the subclass of ASTExpr.
         super(node);
+        this.exprType = ASTExpr.ExprType.Constant;
+        this.value = node.getAttribute("value");
+        if (node.hasAttribute("kind"))
+            this.kind = node.getAttribute("kind");
     }
 
     @Override
@@ -22,7 +26,7 @@ public class ConstantExpr extends ASTExpr {
     @Override
     public ArrayList<ASTElement> getChildren() {
         // TODO: complete the definition of the method `getChildren`
-        return null;
+        return new ArrayList<>(); // follow professor's code.
     }
     @Override
     public void printByPos(StringBuilder str) {

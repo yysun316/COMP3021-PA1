@@ -3,6 +3,7 @@ package hk.ust.comp3021.stmt;
 import hk.ust.comp3021.expr.*;
 import hk.ust.comp3021.misc.*;
 import hk.ust.comp3021.utils.*;
+
 import java.util.*;
 
 public class ClassDefStmt extends ASTStmt {
@@ -22,12 +23,26 @@ public class ClassDefStmt extends ASTStmt {
     public ClassDefStmt(XMLNode node) {
         // TODO: complete the definition of the constructor. Define the class as the subclass of ASTExpr.
         super(node);
+        this.stmtType = ASTStmt.StmtType.ClassDef;
+        this.name = node.getAttribute("name");
+        for (XMLNode baseNode : node.getChildByIdx(0).getChildren())
+            this.bases.add(ASTExpr.createASTExpr(baseNode));
+        for (XMLNode keywordNode : node.getChildByIdx(1).getChildren())
+            this.keywords.add(new ASTKeyWord(keywordNode));
+        for (XMLNode bodyNode : node.getChildByIdx(2).getChildren())
+            this.body.add(ASTStmt.createASTStmt(bodyNode));
+        for (XMLNode decoratorListNode : node.getChildByIdx(3).getChildren())
+            this.decoratorList.add(ASTExpr.createASTExpr(decoratorListNode));
     }
 
     @Override
     public ArrayList<ASTElement> getChildren() {
         // TODO: complete the definition of the method `getChildren`
-        return null;
+        ArrayList<ASTElement> children = new ArrayList<>(bases);
+        children.addAll(keywords);
+        children.addAll(body);
+        children.addAll(decoratorList);
+        return children;
     }
 
     @Override

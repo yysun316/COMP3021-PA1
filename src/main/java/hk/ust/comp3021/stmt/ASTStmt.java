@@ -1,5 +1,6 @@
 package hk.ust.comp3021.stmt;
 
+import hk.ust.comp3021.ASTManager;
 import hk.ust.comp3021.misc.*;
 import hk.ust.comp3021.utils.*;
 
@@ -35,7 +36,22 @@ public abstract class ASTStmt extends ASTElement {
      */
     public static ASTStmt createASTStmt(XMLNode node) {
         // TODO: complete the definition of the method `createASTStmt`
-        return null;
+        String tagName = node.getTagName();
+
+        return switch (tagName){
+            case "Assign" -> new AssignStmt(node);
+            case "AugAssign" -> new AugAssignStmt(node);
+            case "Break" -> new BreakStmt(node);
+            case "ClassDef" -> new ClassDefStmt(node);
+            case "Continue" -> new ContinueStmt(node);
+            case "Expr" -> new ExprStmt(node);
+            case "For" -> new ForStmt(node);
+            case "FunctionDef" -> new FunctionDefStmt(node);
+            case "If" -> new IfStmt(node);
+            case "Return" -> new ReturnStmt(node);
+            case "While" -> new WhileStmt(node);
+            default -> throw new IllegalStateException("Unexpected value: " + tagName + "Check createASTStmt");
+        };
     }
 
     /**
