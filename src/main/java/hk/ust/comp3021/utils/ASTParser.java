@@ -66,13 +66,14 @@ public class ASTParser {
      */
     public void parse2XMLNode() {
         // TODO: complete the definition of the method `parse2XMLNode`
-        int cnt = 0;
+        int cnt = 1;
         try (FileReader reader = new FileReader("resources/pythonxml/python_" + this.xmlFileID + ".xml")) {
             Scanner sc = new Scanner(reader);
             String line;
             XMLNode curNode = new XMLNode(); // useless tmp node
             while (sc.hasNextLine()) {
-                System.out.println(cnt++);
+//                System.out.println(cnt++);
+                cnt++;
                 // case 0: ast
                 line = sc.nextLine().trim();
                 if (line.equals("<ast>")) {
@@ -95,9 +96,9 @@ public class ASTParser {
                 }
             }
         } catch (IOException e) {
-//            System.out.println("File-open failed");
+            System.out.println("File-open failed");
             isErr = true;
-//            System.out.println("line number is" + e.getStackTrace()[0].getLineNumber());
+            System.out.println("line number is" + cnt);
         } catch (Exception e) {
             System.out.println("Exception");
             isErr = true;
@@ -128,7 +129,7 @@ public class ASTParser {
 
         if (tagNameMatcher.find()) {
             nextNode.setTagName(tagNameMatcher.group(1));
-            System.out.println("Tag name: " + nextNode.getTagName());
+//            System.out.println("Tag name: " + nextNode.getTagName());
         } else {
             throw new IllegalArgumentException("No tag name found");
         }
@@ -137,8 +138,8 @@ public class ASTParser {
         Map<String, String> attrs = new HashMap<>();
         while (attrMatcher.find()) {
             attrs.put(attrMatcher.group(1), attrMatcher.group(2));
-            System.out.println("Attribute name: " + attrMatcher.group(1));
-            System.out.println("Attribute value: " + attrMatcher.group(2));
+//            System.out.println("Attribute name: " + attrMatcher.group(1));
+//            System.out.println("Attribute value: " + attrMatcher.group(2));
         }
         nextNode.setAttributes(attrs);
         return nextNode;

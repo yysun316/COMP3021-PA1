@@ -51,4 +51,28 @@ public class AugAssignStmt extends ASTStmt {
     @Override
     public void yourMethod() {
     }
+
+    public ASTExpr getTarget() {
+        return target;
+    }
+
+    public void setTarget(ASTExpr target) {
+        this.target = target;
+    }
+
+    public ASTEnumOp getOp() {
+        return op;
+    }
+
+    public void setOp(ASTEnumOp op) {
+        this.op = op;
+    }
+
+    public ASTExpr getValue() {
+        return value;
+    }
+
+    public void setValue(ASTExpr value) {
+        this.value = value;
+    }
 }

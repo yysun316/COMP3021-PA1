@@ -46,4 +46,20 @@ public class UnaryOpExpr extends ASTExpr {
     public void yourMethod() {
 
     }
+
+    public ASTEnumOp getOp() {
+        return op;
+    }
+
+    public void setOp(ASTEnumOp op) {
+        this.op = op;
+    }
+
+    public ASTExpr getOperand() {
+        return operand;
+    }
+
+    public void setOperand(ASTExpr operand) {
+        this.operand = operand;
+    }
 }

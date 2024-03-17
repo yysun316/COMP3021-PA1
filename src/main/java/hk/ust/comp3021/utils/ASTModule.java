@@ -1,8 +1,10 @@
 package hk.ust.comp3021.utils;
 
+import hk.ust.comp3021.expr.*;
 import hk.ust.comp3021.misc.*;
 import hk.ust.comp3021.stmt.*;
 
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.function.Function;
 
@@ -17,7 +19,6 @@ public class ASTModule extends ASTElement {
 
         this.body = new ArrayList<>();
         for (XMLNode bodyNode : node.getChildByIdx(0).getChildren()) {
-            System.out.println(bodyNode);
             this.body.add(ASTStmt.createASTStmt(bodyNode));
         }
     }
@@ -32,7 +33,6 @@ public class ASTModule extends ASTElement {
         // TODO: complete the definition of the method `getAllFunctions`
         ArrayList<FunctionDefStmt> result = new ArrayList<>();
         Queue<ASTElement> visited = new LinkedList<>();
-
         for (ASTStmt curStmt : this.body)
             bfsFunctionDef(visited, curStmt, result);
 
@@ -42,7 +42,7 @@ public class ASTModule extends ASTElement {
     private static void bfsFunctionDef(Queue<ASTElement> visited, ASTElement curStmt, ArrayList<FunctionDefStmt> result) {
         if (curStmt == null) return;
         visited.add(curStmt);
-        while (!visited.isEmpty()){
+        while (!visited.isEmpty()) {
             ASTElement tmp = visited.poll();
 
             if (tmp instanceof ASTStmt && tmp.getNodeType().equals("FunctionDef"))
@@ -65,7 +65,33 @@ public class ASTModule extends ASTElement {
      * */
     public ArrayList<ASTEnumOp> getAllOperators() {
         // TODO: complete the definition of the method `getAllOperators`
-        return null;
+        ArrayList<ASTEnumOp> result = new ArrayList<>();
+        Queue<ASTElement> visited = new LinkedList<>();
+
+        for (ASTStmt curStmt : this.body)
+            bfs(visited, curStmt, result);
+
+        return result;
+    }
+
+    private static void bfs(Queue<ASTElement> visited, ASTElement curStmt, ArrayList<ASTEnumOp> result) {
+        if (curStmt == null) return;
+        visited.add(curStmt);
+        while (!visited.isEmpty()) {
+            ASTElement tmp = visited.poll();
+            if (tmp instanceof BinOpExpr)
+            result.add(((BinOpExpr) tmp).getOp());
+            else if (tmp instanceof BoolOpExpr)
+                result.add(((BoolOpExpr) tmp).getOp());
+            else if (tmp instanceof UnaryOpExpr)
+                result.add(((UnaryOpExpr) tmp).getOp());
+            else if (tmp instanceof CompareExpr)
+                result.addAll(((CompareExpr) tmp).getOps());
+            else if (tmp instanceof AugAssignStmt)
+                result.add(((AugAssignStmt) tmp).getOp());
+            if (tmp.getChildren() != null && !tmp.getChildren().isEmpty())
+                visited.addAll(tmp.getChildren());
+        }
     }
 
     /*

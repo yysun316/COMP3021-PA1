@@ -50,4 +50,27 @@ public class BinOpExpr extends ASTExpr {
 
     }
 
+    public ASTExpr getLeft() {
+        return left;
+    }
+
+    public void setLeft(ASTExpr left) {
+        this.left = left;
+    }
+
+    public ASTEnumOp getOp() {
+        return op;
+    }
+
+    public void setOp(ASTEnumOp op) {
+        this.op = op;
+    }
+
+    public ASTExpr getRight() {
+        return right;
+    }
+
+    public void setRight(ASTExpr right) {
+        this.right = right;
+    }
 }

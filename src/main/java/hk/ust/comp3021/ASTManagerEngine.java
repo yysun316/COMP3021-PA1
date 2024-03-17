@@ -1,7 +1,9 @@
 package hk.ust.comp3021;
 
+import hk.ust.comp3021.misc.ASTEnumOp;
 import hk.ust.comp3021.stmt.*;
 import hk.ust.comp3021.utils.*;
+
 import java.io.*;
 import java.util.*;
 
@@ -39,37 +41,37 @@ public class ASTManagerEngine {
                 }
 
                 switch (i) {
-                case 0: {
-                    userInterfaceParseXML();
-                    break;
-                }
-                case 1: {
-                    userInterfaceParamNum();
-                    break;
-                }
-                case 2: {
-                    userInterfaceCommonOp();
-                    break;
-                }
-                case 3: {
-                    userInterfaceCallFuncs();
-                    break;
-                }
-                case 4: {
-                    userInterfaceCountNum();
-                    break;
-                }
-                case 5: {
-                    userInterfaceSortByChild();
-                    break;
-                }
-                case 6: {
-                    userInterfaceRecoverCode();
-                    break;
-                }
-                default: {
+                    case 0: {
+                        userInterfaceParseXML();
+                        break;
+                    }
+                    case 1: {
+                        userInterfaceParamNum();
+                        break;
+                    }
+                    case 2: {
+                        userInterfaceCommonOp();
+                        break;
+                    }
+                    case 3: {
+                        userInterfaceCallFuncs();
+                        break;
+                    }
+                    case 4: {
+                        userInterfaceCountNum();
+                        break;
+                    }
+                    case 5: {
+                        userInterfaceSortByChild();
+                        break;
+                    }
+                    case 6: {
+                        userInterfaceRecoverCode();
+                        break;
+                    }
+                    default: {
 
-                }
+                    }
                 }
                 if (i == 7) {
                     break;
@@ -101,8 +103,8 @@ public class ASTManagerEngine {
 
 
     /*
-    * Task 0: Given AST ID, parse AST from XML files
-    */
+     * Task 0: Given AST ID, parse AST from XML files
+     */
 
     public void processXMLParsing(String xmlID) {
         ASTParser parser = new ASTParser(xmlID);
@@ -188,7 +190,18 @@ public class ASTManagerEngine {
      */
     public HashMap<String, Integer> calculateOp2Nums() {
         // TODO: complete the definition of the method `calculateOp2Nums`
-        return null;
+        HashMap<String, Integer> op2Num = new HashMap<>();
+        for (String key : id2ASTModules.keySet()) {
+            ASTModule module = id2ASTModules.get(key);
+            for (ASTEnumOp op : module.getAllOperators()) {
+                String opName = op.getOperatorName();
+                if (op2Num.containsKey(opName))
+                    op2Num.put(opName, op2Num.get(opName) + 1);
+                else
+                    op2Num.put(opName, 1);
+            }
+        }
+        return op2Num;
     }
 
     /*
@@ -197,7 +210,15 @@ public class ASTManagerEngine {
      */
     public String mostCommonUsedOp(HashMap<String, Integer> op2Num) {
         // TODO: complete the definition of the method `mostCommonUsedOp`
-        return "";
+        int max = 0;
+        String maxOp = null;
+        for (Map.Entry<String, Integer> entry : op2Num.entrySet()) {
+            if (entry.getValue() > max) {
+                max = entry.getValue();
+                maxOp = entry.getKey();
+            }
+        }
+        return max == 0 ? null : maxOp;
     }
 
 
@@ -227,7 +248,20 @@ public class ASTManagerEngine {
      */
     public HashMap<String, Set<String>> calculateCalledFunc() {
         // TODO: complete the definition of the method `calculateCalledFunc`
-        return null;
+//        HashMap<String, Set<String>> calledFunc = new HashMap<>();
+//        for (String key : id2ASTModules.keySet()) {
+//            ASTModule module = id2ASTModules.get(key);
+//            for (FunctionDefStmt func : module.getAllFunctions()) {
+//                Set<String> calledFuncs = new HashSet<>();
+//                for (CallExpr callExpr : func.getAllCalledFunc()) {
+//                    String calledFuncName = callExpr.getCalledFuncName();
+//                    calledFuncs.add(calledFuncName);
+//                }
+//                calledFunc.put(func.getName(), calledFuncs);
+//            }
+//        }
+
+        return calledFunc;
     }
 
     public void userInterfaceCallFuncs() {

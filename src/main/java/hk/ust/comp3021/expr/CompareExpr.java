@@ -53,4 +53,27 @@ public class CompareExpr extends ASTExpr {
 
     }
 
+    public ASTExpr getLeft() {
+        return left;
+    }
+
+    public void setLeft(ASTExpr left) {
+        this.left = left;
+    }
+
+    public ArrayList<ASTEnumOp> getOps() {
+        return ops;
+    }
+
+    public void setOps(ArrayList<ASTEnumOp> ops) {
+        this.ops = ops;
+    }
+
+    public ArrayList<ASTExpr> getComparators() {
+        return comparators;
+    }
+
+    public void setComparators(ArrayList<ASTExpr> comparators) {
+        this.comparators = comparators;
+    }
 }
