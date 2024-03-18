@@ -1,6 +1,5 @@
 package hk.ust.comp3021.utils;
 
-import org.jetbrains.annotations.NotNull;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -118,7 +117,7 @@ public class ASTParser {
 
     }
 
-    @NotNull
+
     private static XMLNode getXMLNodeFromLine(String line) {
         XMLNode nextNode = new XMLNode();
         String tagNameRegex = "<(\\w+)"; // <tag (can be any word)

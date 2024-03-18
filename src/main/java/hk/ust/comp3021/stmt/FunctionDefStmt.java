@@ -40,7 +40,12 @@ public class FunctionDefStmt extends ASTStmt {
      * */
     public ArrayList<CallExpr> getAllCalledFunc() {
         // TODO: complete the definition of the method `getAllCalledFunc`
-        return null;
+        ArrayList<CallExpr> res = new ArrayList<>();
+        for (ASTElement child : getChildren()) {
+            if (child instanceof CallExpr)
+                res.add((CallExpr) child);
+        }
+        return res;
     }
 
     public int getParamNum() {

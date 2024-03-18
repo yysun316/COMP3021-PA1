@@ -1,5 +1,6 @@
 package hk.ust.comp3021;
 
+import hk.ust.comp3021.expr.CallExpr;
 import hk.ust.comp3021.misc.ASTEnumOp;
 import hk.ust.comp3021.stmt.*;
 import hk.ust.comp3021.utils.*;
@@ -248,19 +249,18 @@ public class ASTManagerEngine {
      */
     public HashMap<String, Set<String>> calculateCalledFunc() {
         // TODO: complete the definition of the method `calculateCalledFunc`
-//        HashMap<String, Set<String>> calledFunc = new HashMap<>();
-//        for (String key : id2ASTModules.keySet()) {
-//            ASTModule module = id2ASTModules.get(key);
-//            for (FunctionDefStmt func : module.getAllFunctions()) {
-//                Set<String> calledFuncs = new HashSet<>();
-//                for (CallExpr callExpr : func.getAllCalledFunc()) {
-//                    String calledFuncName = callExpr.getCalledFuncName();
-//                    calledFuncs.add(calledFuncName);
-//                }
-//                calledFunc.put(func.getName(), calledFuncs);
-//            }
-//        }
-
+        HashMap<String, Set<String>> calledFunc = new HashMap<>();
+        for (String key : id2ASTModules.keySet()) {
+            ASTModule module = id2ASTModules.get(key);
+            for (FunctionDefStmt func : module.getAllFunctions()) {
+                Set<String> calledFuncs = new HashSet<>();
+                for (CallExpr callExpr : func.getAllCalledFunc()) {
+                    String calledFuncName = callExpr.getCalledFuncName();
+                    calledFuncs.add(calledFuncName);
+                }
+                calledFunc.put(func.getName(), calledFuncs);
+            }
+        }
         return calledFunc;
     }
 

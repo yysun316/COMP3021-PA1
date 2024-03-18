@@ -50,4 +50,28 @@ public class AttributeExpr extends ASTExpr {
     public void yourMethod() {
 
     }
+
+    public ASTExpr getValue() {
+        return value;
+    }
+
+    public void setValue(ASTExpr value) {
+        this.value = value;
+    }
+
+    public String getAttr() {
+        return attr;
+    }
+
+    public void setAttr(String attr) {
+        this.attr = attr;
+    }
+
+    public ASTEnumOp getCtx() {
+        return ctx;
+    }
+
+    public void setCtx(ASTEnumOp ctx) {
+        this.ctx = ctx;
+    }
 }

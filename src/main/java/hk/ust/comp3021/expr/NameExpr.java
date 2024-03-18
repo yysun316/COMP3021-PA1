@@ -44,4 +44,19 @@ public class NameExpr extends ASTExpr {
 
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public ASTEnumOp getCtx() {
+        return ctx;
+    }
+
+    public void setCtx(ASTEnumOp ctx) {
+        this.ctx = ctx;
+    }
 }
