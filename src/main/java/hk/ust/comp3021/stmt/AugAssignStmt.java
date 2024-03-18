@@ -31,12 +31,19 @@ public class AugAssignStmt extends ASTStmt {
     @Override
     public int countChildren() {
         // TODO: complete the definition of the method `countChildren`
-        return 0;
+        return CountChildren.countChildren(this);
     }
 
     @Override
     public void printByPos(StringBuilder str) {
         // TODO: (Bonus) complete the definition of the method `printByPos`
+        this.fillStartBlanks(str);
+        target.printByPos(str);
+        str.append(" ");
+        this.op.printByPos(str);
+        str.append("= ");
+        value.printByPos(str);
+        this.fillEndBlanks(str);
     }
 
     /**

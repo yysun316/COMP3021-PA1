@@ -2,7 +2,6 @@ package hk.ust.comp3021.expr;
 
 import hk.ust.comp3021.misc.*;
 import hk.ust.comp3021.utils.*;
-import org.w3c.dom.Attr;
 
 public abstract class ASTExpr extends ASTElement {
     enum ExprType {

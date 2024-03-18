@@ -4,10 +4,7 @@ import hk.ust.comp3021.expr.*;
 import hk.ust.comp3021.misc.*;
 import hk.ust.comp3021.stmt.*;
 
-import java.lang.reflect.Array;
 import java.util.*;
-import java.util.function.Function;
-
 
 public class ASTModule extends ASTElement {
     // Module(stmt* body, ...)
@@ -28,7 +25,7 @@ public class ASTModule extends ASTElement {
      * Hints: you need to traverse all the nodes in AST and check its class type.
      * We have prepared the method `getChildren` for you to ease the traversal.
      * You may need to remove the `return null` in the skeleton.
-     * */
+     */
     public ArrayList<FunctionDefStmt> getAllFunctions() {
         // TODO: complete the definition of the method `getAllFunctions`
         ArrayList<FunctionDefStmt> result = new ArrayList<>();
@@ -39,8 +36,10 @@ public class ASTModule extends ASTElement {
         return result;
     }
 
-    private static void bfsFunctionDef(Queue<ASTElement> visited, ASTElement curStmt, ArrayList<FunctionDefStmt> result) {
-        if (curStmt == null) return;
+    private static void bfsFunctionDef(Queue<ASTElement> visited, ASTElement curStmt,
+            ArrayList<FunctionDefStmt> result) {
+        if (curStmt == null)
+            return;
         visited.add(curStmt);
         while (!visited.isEmpty()) {
             ASTElement tmp = visited.poll();
@@ -53,16 +52,17 @@ public class ASTModule extends ASTElement {
         }
     }
 
-
     /*
      * Find all operators whose class type is `ASTEnumOp` shown in the AST.
-     * Hints: We have prepared the method `getChildren` for you to ease the traversal.
+     * Hints: We have prepared the method `getChildren` for you to ease the
+     * traversal.
      * But ASTEnumOp is not regarded as children node in AST Tree.
-     * To find all operators, you need to first find the nodes whose types are BinOpExpr, BoolOpExpr, etc.
+     * To find all operators, you need to first find the nodes whose types are
+     * BinOpExpr, BoolOpExpr, etc.
      * Then, you obtain their operators by accessing field `op`.
      * Further, Ctx_Store, Ctx_Load and Ctx_Del are not operators as well.
      * You may need to remove the `return null` in the skeleton.
-     * */
+     */
     public ArrayList<ASTEnumOp> getAllOperators() {
         // TODO: complete the definition of the method `getAllOperators`
         ArrayList<ASTEnumOp> result = new ArrayList<>();
@@ -75,7 +75,8 @@ public class ASTModule extends ASTElement {
     }
 
     private static void bfsOps(Queue<ASTElement> visited, ASTElement curStmt, ArrayList<ASTEnumOp> result) {
-        if (curStmt == null) return;
+        if (curStmt == null)
+            return;
         visited.add(curStmt);
         while (!visited.isEmpty()) {
             ASTElement tmp = visited.poll();
@@ -98,7 +99,7 @@ public class ASTModule extends ASTElement {
      * Find all AST node shown in the AST
      * Hints: you need to traverse all the nodes in AST.
      * You may need to remove the `return null` in the skeleton.
-     * */
+     */
     public ArrayList<ASTElement> getAllNodes() {
         // TODO: complete the definition of the method `getAllNodes`
         ArrayList<ASTElement> result = new ArrayList<>();
@@ -122,12 +123,25 @@ public class ASTModule extends ASTElement {
     @Override
     public int countChildren() {
         // TODO: complete the definition of the method `countChildren`
-        return 0;
+        return CountChildren.countChildren(this);
     }
 
     @Override
     public void printByPos(StringBuilder str) {
         // TODO: (Bonus) complete the definition of the method `printByPos`
+//        System.out.println("calling me");
+        for (ASTElement node : this.body) {
+            if (!(node instanceof ASTStmt) && !(node instanceof ASTExpr))
+                continue;
+//            System.out.println("Printing node");
+            try {
+                node.printByPos(str);
+            } catch (Exception ignored) {
+            }
+//            System.out.println("StringBuilder after printing node: " + str);
+        }
+
+
     }
 
     public String getASTID() {
@@ -140,11 +154,13 @@ public class ASTModule extends ASTElement {
     }
 
     /**
-     * Attention: You may need to define more methods to update or access the field of the class `User`
+     * Attention: You may need to define more methods to update or access the field
+     * of the class `User`
      * Feel free to define more method but remember not
      * (1) removing the fields or methods in our skeleton.
      * (2) changing the type signature of `public` methods
-     * (3) changing the modifiers of the fields and methods, e.g., changing a modifier from "private" to "public"
+     * (3) changing the modifiers of the fields and methods, e.g., changing a
+     * modifier from "private" to "public"
      */
     public void yourMethod() {
 

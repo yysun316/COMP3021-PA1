@@ -73,26 +73,20 @@ public class ASTParser {
             while (sc.hasNextLine()) {
 //                System.out.println(cnt++);
                 cnt++;
-                // case 0: ast
-                line = sc.nextLine().trim();
+
+                line = sc.nextLine().trim(); // case 0: ast
                 if (line.equals("<ast>")) {
                     curNode = new XMLNode("ast");
                     this.rootXMLNode = curNode;
-                }
-                // case 1: <tag> node or <tag />
-                else if (!line.startsWith("</")) {
+                } else if (!line.startsWith("</")) { // case 1: <tag> node or <tag />
                     XMLNode nextNode = getXMLNodeFromLine(line);
                     curNode.addChild(nextNode);
                     curNode = nextNode;
                     if (line.endsWith("/>"))
                         curNode = curNode.getParent();
-                }
-                // case 2: </tag>
-                else if (line.startsWith("</"))
+                } else if (line.startsWith("</"))// case 2: </tag>
                     curNode = curNode.getParent();
-                else {
 
-                }
             }
         } catch (IOException e) {
             System.out.println("File-open failed");

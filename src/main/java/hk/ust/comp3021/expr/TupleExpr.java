@@ -21,6 +21,11 @@ public class TupleExpr extends ASTExpr {
     @Override
     public void printByPos(StringBuilder str) {
         // TODO: (Bonus) complete the definition of the method `printByPos`
+        for (int i = 0; i < this.elts.size(); i++) {
+            this.elts.get(i).printByPos(str);
+            if (i != this.elts.size() - 1)
+                str.append(", ");
+        }
     }
 
     @Override
@@ -32,7 +37,7 @@ public class TupleExpr extends ASTExpr {
     @Override
     public int countChildren() {
         // TODO: complete the definition of the method `countChildren`
-        return 0;
+        return CountChildren.countChildren(this);
     }
 
     /**

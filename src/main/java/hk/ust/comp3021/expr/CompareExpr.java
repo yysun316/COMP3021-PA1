@@ -34,12 +34,21 @@ public class CompareExpr extends ASTExpr {
     @Override
     public int countChildren() {
         // TODO: complete the definition of the method `countChildren`
-        return 0;
+        return CountChildren.countChildren(this);
     }
 
     @Override
     public void printByPos(StringBuilder str) {
         // TODO: (Bonus) complete the definition of the method `printByPos`
+        this.left.printByPos(str);
+        str.append(" ");
+        for (int i = 0; i < this.ops.size(); i++) {
+            this.ops.get(i).printByPos(str);
+        }
+        str.append(" ");
+        for (int i = 0; i < this.comparators.size(); i++) {
+            this.comparators.get(i).printByPos(str);
+        }
     }
 
     /**

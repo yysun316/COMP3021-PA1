@@ -1,9 +1,9 @@
 package hk.ust.comp3021.expr;
 
 import hk.ust.comp3021.misc.*;
+import hk.ust.comp3021.utils.CountChildren;
 import hk.ust.comp3021.utils.XMLNode;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class AttributeExpr extends ASTExpr {
@@ -24,7 +24,7 @@ public class AttributeExpr extends ASTExpr {
     @Override
     public int countChildren() {
         // TODO: complete the definition of the method `countChildren`
-        return 0;
+        return CountChildren.countChildren(this);
     }
 
     @Override
@@ -38,6 +38,8 @@ public class AttributeExpr extends ASTExpr {
     @Override
     public void printByPos(StringBuilder str) {
         // TODO: (Bonus) complete the definition of the method `printByPos`
+        this.value.printByPos(str);
+        str.append(".").append(this.attr);
     }
 
     /**

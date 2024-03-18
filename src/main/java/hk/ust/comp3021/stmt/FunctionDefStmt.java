@@ -4,7 +4,6 @@ import hk.ust.comp3021.expr.*;
 import hk.ust.comp3021.misc.*;
 import hk.ust.comp3021.utils.*;
 
-import java.sql.Array;
 import java.util.*;
 
 public class FunctionDefStmt extends ASTStmt {
@@ -79,21 +78,31 @@ public class FunctionDefStmt extends ASTStmt {
     @Override
     public int countChildren() {
         // TODO: complete the definition of the method `countChildren`
-        int count = 0;
-        Queue<ASTElement> queue = new LinkedList<>();
-        queue.add(this);
-        while (!queue.isEmpty()) {
-            ASTElement cur = queue.poll();
-            count++;
-            if (cur.getChildren() != null && !cur.getChildren().isEmpty())
-                queue.addAll(cur.getChildren());
-        }
-        return count;
+        return CountChildren.countChildren(this);
     }
 
     @Override
     public void printByPos(StringBuilder str) {
         // TODO: (Bonus) complete the definition of the method `printByPos`
+        this.fillStartBlanks(str);
+        for (ASTExpr astExpr : decoratorList) {
+            astExpr.printByPos(str);
+            str.append("\n");
+        }
+        str.append("def ").append(this.name).append("(");
+        this.args.printByPos(str);
+        str.append(")");
+
+        if (returns != null){
+            str.append(" -> ");
+            returns.printByPos(str);
+        }
+        str.append(":");
+
+        for (ASTStmt stmt : body)
+            stmt.printByPos(str);
+
+        this.fillEndBlanks(str);
     }
 
     /**

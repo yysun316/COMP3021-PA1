@@ -32,7 +32,7 @@ public class ASTKeyWord extends ASTElement {
     @Override
     public int countChildren() {
         // TODO: complete the definition of the method `countChildren`
-        return 0;
+        return CountChildren.countChildren(this);
     }
 
     @Override
@@ -43,6 +43,10 @@ public class ASTKeyWord extends ASTElement {
     @Override
     public void printByPos(StringBuilder str) {
         // TODO: (Bonus) complete the definition of the method `printByPos`
+        // 690
+        if (this.arg != null)
+            str.append(arg).append("=");
+        value.printByPos(str);
     }
 
     /**

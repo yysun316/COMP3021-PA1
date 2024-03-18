@@ -3,6 +3,7 @@ package hk.ust.comp3021.stmt;
 import hk.ust.comp3021.expr.*;
 import hk.ust.comp3021.misc.*;
 import hk.ust.comp3021.utils.*;
+
 import java.util.ArrayList;
 
 
@@ -12,6 +13,7 @@ public class ForStmt extends ASTStmt {
     private ASTExpr iter;
     private ArrayList<ASTStmt> body = new ArrayList<>();
     private ArrayList<ASTStmt> orelse = new ArrayList<>();
+
     public ForStmt(XMLNode node) {
         // TODO: complete the definition of the constructor. Define the class as the subclass of ASTExpr.
         super(node);
@@ -34,15 +36,27 @@ public class ForStmt extends ASTStmt {
         children.addAll(orelse);
         return children;
     }
+
     @Override
     public int countChildren() {
         // TODO: complete the definition of the method `countChildren`
-        return 0;
+        return CountChildren.countChildren(this);
     }
 
     @Override
     public void printByPos(StringBuilder str) {
         // TODO: (Bonus) complete the definition of the method `printByPos`
+        this.fillStartBlanks(str);
+        str.append("for ");
+        this.target.printByPos(str);
+        this.iter.printByPos(str);
+        str.append(":");
+        for (ASTStmt stmt : body)
+            stmt.printByPos(str);
+
+        for (ASTStmt stmt : orelse)
+            stmt.printByPos(str);
+        this.fillEndBlanks(str);
     }
 
     /**

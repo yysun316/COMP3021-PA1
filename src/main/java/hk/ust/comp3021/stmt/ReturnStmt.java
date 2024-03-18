@@ -36,7 +36,7 @@ public class ReturnStmt extends ASTStmt {
     @Override
     public void printByPos(StringBuilder str) {
         this.fillStartBlanks(str);
-        str.append("return");
+        str.append("return ");
         if (value != null) {
             value.printByPos(str);
         }

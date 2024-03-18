@@ -2,12 +2,14 @@ package hk.ust.comp3021.expr;
 
 import hk.ust.comp3021.misc.*;
 import hk.ust.comp3021.utils.*;
+
 import java.util.*;
 
 public class ListExpr extends ASTExpr {
     // List(expr* elts, expr_context ctx)
     private ArrayList<ASTExpr> elts = new ArrayList<>();
     private ASTEnumOp ctx;
+
     public ListExpr(XMLNode node) {
         // TODO: complete the definition of the constructor. Define the class as the subclass of ASTExpr.
         super(node);
@@ -26,12 +28,19 @@ public class ListExpr extends ASTExpr {
     @Override
     public int countChildren() {
         // TODO: complete the definition of the method `countChildren`
-        return 0;
+        return CountChildren.countChildren(this);
     }
 
     @Override
     public void printByPos(StringBuilder str) {
         // TODO: (Bonus) complete the definition of the method `printByPos`
+        str.append("[");
+        for (int i = 0; i < this.elts.size(); i++) { // python_147
+            this.elts.get(i).printByPos(str);
+            if (i != this.elts.size() - 1)
+                str.append(", ");
+        }
+        str.append("]");
     }
 
     /**

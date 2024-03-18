@@ -48,12 +48,39 @@ public class ClassDefStmt extends ASTStmt {
     @Override
     public int countChildren() {
         // TODO: complete the definition of the method `countChildren`
-        return 0;
+        return CountChildren.countChildren(this);
     }
 
     @Override
     public void printByPos(StringBuilder str) {
         // TODO: (Bonus) complete the definition of the method `printByPos`
+        this.fillStartBlanks(str);
+        for (ASTExpr astExpr : decoratorList) {
+            astExpr.printByPos(str);
+            str.append("\n");
+        }
+        str.append("class ").append(this.name);
+        if (!this.bases.isEmpty())
+            str.append("(");
+        for (int i = 0; i < this.bases.size(); i++) {
+            this.bases.get(i).printByPos(str);
+            if (i != this.bases.size() - 1)
+                str.append(", ");
+        }
+        if (!this.bases.isEmpty())
+            str.append(")");
+        str.append(":");
+
+        for (int i = 0; i < keywords.size(); i++) {
+            keywords.get(i).printByPos(str);
+            if (i != keywords.size() - 1)
+                str.append("\n");
+        }
+
+        for (ASTStmt astStmt : this.body)
+            astStmt.printByPos(str);
+
+        this.fillEndBlanks(str);
     }
 
     /**

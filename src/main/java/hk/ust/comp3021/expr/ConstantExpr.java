@@ -14,14 +14,14 @@ public class ConstantExpr extends ASTExpr {
         super(node);
         this.exprType = ASTExpr.ExprType.Constant;
         this.value = node.getAttribute("value");
-        if (node.hasAttribute("kind"))
+        if (!node.hasAttribute("kind"))
             this.kind = node.getAttribute("kind");
     }
 
     @Override
     public int countChildren() {
         // TODO: complete the definition of the method `countChildren`
-        return 0;
+        return CountChildren.countChildren(this);
     }
     @Override
     public ArrayList<ASTElement> getChildren() {
@@ -31,6 +31,9 @@ public class ConstantExpr extends ASTExpr {
     @Override
     public void printByPos(StringBuilder str) {
         // TODO: (Bonus) complete the definition of the method `printByPos`
+        str.append(this.value);
+        if (this.kind != null)
+            str.append(" ").append(this.kind);
     }
 
     /**
