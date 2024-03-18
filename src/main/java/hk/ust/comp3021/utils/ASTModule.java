@@ -69,18 +69,18 @@ public class ASTModule extends ASTElement {
         Queue<ASTElement> visited = new LinkedList<>();
 
         for (ASTStmt curStmt : this.body)
-            bfs(visited, curStmt, result);
+            bfsOps(visited, curStmt, result);
 
         return result;
     }
 
-    private static void bfs(Queue<ASTElement> visited, ASTElement curStmt, ArrayList<ASTEnumOp> result) {
+    private static void bfsOps(Queue<ASTElement> visited, ASTElement curStmt, ArrayList<ASTEnumOp> result) {
         if (curStmt == null) return;
         visited.add(curStmt);
         while (!visited.isEmpty()) {
             ASTElement tmp = visited.poll();
             if (tmp instanceof BinOpExpr)
-            result.add(((BinOpExpr) tmp).getOp());
+                result.add(((BinOpExpr) tmp).getOp());
             else if (tmp instanceof BoolOpExpr)
                 result.add(((BoolOpExpr) tmp).getOp());
             else if (tmp instanceof UnaryOpExpr)
@@ -101,13 +101,22 @@ public class ASTModule extends ASTElement {
      * */
     public ArrayList<ASTElement> getAllNodes() {
         // TODO: complete the definition of the method `getAllNodes`
-        return null;
+        ArrayList<ASTElement> result = new ArrayList<>();
+        result.add(this);
+        Queue<ASTElement> visited = new LinkedList<>(this.body);
+        while (!visited.isEmpty()) {
+            ASTElement tmp = visited.poll();
+            result.add(tmp);
+            if (tmp.getChildren() != null && !tmp.getChildren().isEmpty())
+                visited.addAll(tmp.getChildren());
+        }
+        return result;
     }
 
     @Override
     public ArrayList<ASTElement> getChildren() {
         // TODO: complete the definition of the method `getChildren`
-        return null;
+        return new ArrayList<>(this.body);
     }
 
     @Override

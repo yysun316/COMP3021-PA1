@@ -41,13 +41,22 @@ public class FunctionDefStmt extends ASTStmt {
     public ArrayList<CallExpr> getAllCalledFunc() {
         // TODO: complete the definition of the method `getAllCalledFunc`
         ArrayList<CallExpr> res = new ArrayList<>();
-        for (ASTElement child : getChildren()) {
-            if (child instanceof CallExpr)
-                res.add((CallExpr) child);
-        }
+        for (ASTElement child : getChildren())
+            bfs(child, res);
         return res;
     }
 
+    public static void bfs(ASTElement root, ArrayList<CallExpr> res) {
+        Queue<ASTElement> queue = new LinkedList<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            ASTElement cur = queue.poll();
+            if (cur instanceof CallExpr)
+                res.add((CallExpr) cur);
+            if (cur.getChildren() != null && !cur.getChildren().isEmpty())
+                queue.addAll(cur.getChildren());
+        }
+    }
     public int getParamNum() {
         return args.getParamNum();
     }
@@ -70,7 +79,16 @@ public class FunctionDefStmt extends ASTStmt {
     @Override
     public int countChildren() {
         // TODO: complete the definition of the method `countChildren`
-        return 0;
+        int count = 0;
+        Queue<ASTElement> queue = new LinkedList<>();
+        queue.add(this);
+        while (!queue.isEmpty()) {
+            ASTElement cur = queue.poll();
+            count++;
+            if (cur.getChildren() != null && !cur.getChildren().isEmpty())
+                queue.addAll(cur.getChildren());
+        }
+        return count;
     }
 
     @Override
@@ -90,5 +108,4 @@ public class FunctionDefStmt extends ASTStmt {
     @Override
     public void yourMethod() {
     }
-
 }

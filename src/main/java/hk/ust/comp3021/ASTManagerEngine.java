@@ -1,12 +1,15 @@
 package hk.ust.comp3021;
 
 import hk.ust.comp3021.expr.CallExpr;
+import hk.ust.comp3021.misc.ASTElement;
 import hk.ust.comp3021.misc.ASTEnumOp;
 import hk.ust.comp3021.stmt.*;
 import hk.ust.comp3021.utils.*;
 
 import java.io.*;
 import java.util.*;
+
+import static java.util.Collections.*;
 
 public class ASTManagerEngine {
     private final String defaultXMLFileDir;
@@ -252,13 +255,17 @@ public class ASTManagerEngine {
         HashMap<String, Set<String>> calledFunc = new HashMap<>();
         for (String key : id2ASTModules.keySet()) {
             ASTModule module = id2ASTModules.get(key);
-            for (FunctionDefStmt func : module.getAllFunctions()) {
-                Set<String> calledFuncs = new HashSet<>();
-                for (CallExpr callExpr : func.getAllCalledFunc()) {
-                    String calledFuncName = callExpr.getCalledFuncName();
-                    calledFuncs.add(calledFuncName);
+
+            for (FunctionDefStmt caller : module.getAllFunctions()) { // each caller calls set of functions
+                Set<String> callee = new HashSet<>();
+
+                for (CallExpr callExpr : caller.getAllCalledFunc()) {
+                    String calleeName = key + "_" + callExpr.getCalledFuncName() + "_" + callExpr.getLineNo();
+                    callee.add(calleeName);
                 }
-                calledFunc.put(func.getName(), calledFuncs);
+
+                String callerName = key + "_" + caller.getName() + "_" + caller.getLineNo();
+                calledFunc.put(callerName, callee);
             }
         }
         return calledFunc;
@@ -289,7 +296,16 @@ public class ASTManagerEngine {
      */
     public HashMap<String, Integer> calculateNode2Nums(String astID) {
         // TODO: complete the definition of the method `calculateNode2Nums`
-        return null;
+        HashMap<String, Integer> node2Num = new HashMap<>();
+        ASTModule module = id2ASTModules.get(astID);
+        for (ASTElement node : module.getAllNodes()) {
+            String nodeType = node.getNodeType();
+            if (node2Num.containsKey(nodeType))
+                node2Num.put(nodeType, node2Num.get(nodeType) + 1);
+            else
+                node2Num.put(nodeType, 1);
+        }
+        return node2Num;
     }
 
     public void userInterfaceCountNum() {
@@ -338,7 +354,14 @@ public class ASTManagerEngine {
      */
     public HashMap<String, Integer> processNodeFreq() {
         // TODO: complete the definition of the method `processNodeFreq`
-        return null;
+        HashMap<String, Integer> funcName2NodeNum = new HashMap<>();
+        for (String key : id2ASTModules.keySet()) {
+            ASTModule module = id2ASTModules.get(key);
+            for (FunctionDefStmt func : module.getAllFunctions()) {
+                funcName2NodeNum.put(key + "_" + func.getName() + "_" + func.getLineNo(), func.countChildren());
+            }
+        }
+        return funcName2NodeNum;
     }
 
     /*
@@ -347,7 +370,9 @@ public class ASTManagerEngine {
      */
     public List<Map.Entry<String, Integer>> sortHashMapByValue(HashMap<String, Integer> map) {
         // TODO: complete the definition of the method `sortHashMapByValue`
-        return null;
+        List<Map.Entry<String, Integer>> sortedFunctions = new ArrayList<>(map.entrySet());
+        sortedFunctions.sort(Comparator.comparingInt(Map.Entry::getValue));
+        return sortedFunctions;
     }
 
     public void userInterfaceSortByChild() {

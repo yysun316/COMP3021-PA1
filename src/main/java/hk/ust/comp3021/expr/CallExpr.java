@@ -38,7 +38,7 @@ public class CallExpr extends ASTExpr {
             ASTElement cur = func;
             while (!(cur instanceof NameExpr)) {
                 if (cur instanceof AttributeExpr) {
-                    res.insert(0, ((AttributeExpr) cur).getAttr() + ".");
+                    res.insert(0, "." + ((AttributeExpr) cur).getAttr());
                     cur = ((AttributeExpr) cur).getValue();
                 }
             }
