@@ -31,7 +31,11 @@ public class ConstantExpr extends ASTExpr {
     @Override
     public void printByPos(StringBuilder str) {
         // TODO: (Bonus) complete the definition of the method `printByPos`
+        if (!isDigit(this.value) && !this.value.equals("None") && !this.value.equals("True") && !this.value.equals("False"))
+            str.append("'");
         str.append(this.value);
+        if (!isDigit(this.value) && !this.value.equals("None") && !this.value.equals("True") && !this.value.equals("False"))
+            str.append("'");
         if (this.kind != null)
             str.append(" ").append(this.kind);
     }
@@ -45,5 +49,13 @@ public class ConstantExpr extends ASTExpr {
      */
     public void yourMethod() {
 
+    }
+
+    public static boolean isDigit(String s) {
+        for (char c : s.toCharArray()) {
+            if (!Character.isDigit(c))
+                return false;
+        }
+        return true;
     }
 }

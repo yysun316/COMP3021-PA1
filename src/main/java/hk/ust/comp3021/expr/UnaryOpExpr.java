@@ -35,6 +35,9 @@ public class UnaryOpExpr extends ASTExpr {
     public void printByPos(StringBuilder str) {
         // TODO: (Bonus) complete the definition of the method `printByPos`
         this.op.printByPos(str);
+        if (this.op.getOperatorName().equals("Not"))
+            str.append(" ");
+
         this.operand.printByPos(str);
     }
 

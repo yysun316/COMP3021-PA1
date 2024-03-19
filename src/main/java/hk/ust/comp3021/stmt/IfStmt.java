@@ -3,6 +3,7 @@ package hk.ust.comp3021.stmt;
 import hk.ust.comp3021.expr.*;
 import hk.ust.comp3021.misc.*;
 import hk.ust.comp3021.utils.*;
+
 import java.util.ArrayList;
 
 
@@ -48,8 +49,21 @@ public class IfStmt extends ASTStmt {
         str.append(":");
         for (ASTStmt stmt : body)
             stmt.printByPos(str);
-        for (ASTStmt stmt : orelse)
-            stmt.printByPos(str);
+
+        if (!orelse.isEmpty()) {
+            if (orelse.get(0) instanceof IfStmt) {
+                str.append("\n").append(" ".repeat(this.getColOffset())).append("el");
+                StringBuilder str2 = new StringBuilder();
+                for (ASTStmt stmt : orelse)
+                    stmt.printByPos(str2);
+                str.append(str2.toString().trim());
+            } else {
+                str.append("\n").append(" ".repeat(this.getColOffset())).append("else:");
+                for (ASTStmt stmt : orelse)
+                    stmt.printByPos(str);
+            }
+
+        }
         this.fillEndBlanks(str);
     }
 

@@ -49,6 +49,7 @@ public class ForStmt extends ASTStmt {
         this.fillStartBlanks(str);
         str.append("for ");
         this.target.printByPos(str);
+        str.append(" in ");
         this.iter.printByPos(str);
         str.append(":");
         for (ASTStmt stmt : body)
