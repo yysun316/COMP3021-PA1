@@ -2,7 +2,6 @@ package hk.ust.comp3021.utils;
 
 
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -65,15 +64,11 @@ public class ASTParser {
      */
     public void parse2XMLNode() {
         // TODO: complete the definition of the method `parse2XMLNode`
-        int cnt = 1;
         try (FileReader reader = new FileReader("resources/pythonxml/python_" + this.xmlFileID + ".xml")) {
             Scanner sc = new Scanner(reader);
             String line;
             XMLNode curNode = new XMLNode(); // useless tmp node
             while (sc.hasNextLine()) {
-//                System.out.println(cnt++);
-                cnt++;
-
                 line = sc.nextLine().trim(); // case 0: ast
                 if (line.equals("<ast>")) {
                     curNode = new XMLNode("ast");
@@ -86,16 +81,9 @@ public class ASTParser {
                         curNode = curNode.getParent();
                 } else if (line.startsWith("</"))// case 2: </tag>
                     curNode = curNode.getParent();
-
             }
-        } catch (IOException e) {
-            System.out.println("File-open failed");
-            isErr = true;
-            System.out.println("line number is" + cnt);
         } catch (Exception e) {
-            System.out.println("Exception");
             isErr = true;
-            System.out.println("File: " + xmlFileID + " line number is" + cnt);
         }
 
     }
@@ -114,15 +102,14 @@ public class ASTParser {
 
     private static XMLNode getXMLNodeFromLine(String line) {
         XMLNode nextNode = new XMLNode();
-        String tagNameRegex = "<(\\w+)"; // <tag (can be any word)
-        String attrRegex = "(\\w+)=\"(.*?)\""; // attr="value" attribute value can be any string
+        String tagNameRegex = "<(\\w+)";
+        String attrRegex = "(\\w+)=\"(.*?)\"";
 
         Pattern tagNamePattern = Pattern.compile(tagNameRegex);
         Matcher tagNameMatcher = tagNamePattern.matcher(line);
 
         if (tagNameMatcher.find()) {
             nextNode.setTagName(tagNameMatcher.group(1));
-//            System.out.println("Tag name: " + nextNode.getTagName());
         } else {
             throw new IllegalArgumentException("No tag name found");
         }
@@ -131,8 +118,6 @@ public class ASTParser {
         Map<String, String> attrs = new HashMap<>();
         while (attrMatcher.find()) {
             attrs.put(attrMatcher.group(1), attrMatcher.group(2));
-//            System.out.println("Attribute name: " + attrMatcher.group(1));
-//            System.out.println("Attribute value: " + attrMatcher.group(2));
         }
         nextNode.setAttributes(attrs);
         return nextNode;

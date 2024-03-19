@@ -404,7 +404,6 @@ public class ASTManagerEngine {
         }
     }
 
-    // my methods
 
     public String getDefaultXMLFileDir() {
         return defaultXMLFileDir;

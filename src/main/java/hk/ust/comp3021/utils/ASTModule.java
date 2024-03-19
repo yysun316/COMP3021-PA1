@@ -36,8 +36,7 @@ public class ASTModule extends ASTElement {
         return result;
     }
 
-    private static void bfsFunctionDef(Queue<ASTElement> visited, ASTElement curStmt,
-            ArrayList<FunctionDefStmt> result) {
+    private static void bfsFunctionDef(Queue<ASTElement> visited, ASTElement curStmt, ArrayList<FunctionDefStmt> result) {
         if (curStmt == null)
             return;
         visited.add(curStmt);
@@ -129,19 +128,11 @@ public class ASTModule extends ASTElement {
     @Override
     public void printByPos(StringBuilder str) {
         // TODO: (Bonus) complete the definition of the method `printByPos`
-//        System.out.println("calling me");
         for (ASTElement node : this.body) {
             if (!(node instanceof ASTStmt) && !(node instanceof ASTExpr))
                 continue;
-//            System.out.println("Printing node");
-            try {
-                node.printByPos(str);
-            } catch (Exception ignored) {
-            }
-//            System.out.println("StringBuilder after printing node: " + str);
+            node.printByPos(str);
         }
-
-
     }
 
     public String getASTID() {
