@@ -255,11 +255,14 @@ public class ASTManagerEngine {
         HashMap<String, Set<String>> calledFunc = new HashMap<>();
         for (String key : id2ASTModules.keySet()) {
             ASTModule module = id2ASTModules.get(key);
+//            System.out.println("Module " + key);
 
             for (FunctionDefStmt caller : module.getAllFunctions()) { // each caller calls set of functions
+//                System.out.println("Caller " + caller.getName() + " at line " + caller.getLineNo());
                 Set<String> callee = new HashSet<>();
 
                 for (CallExpr callExpr : caller.getAllCalledFunc()) {
+//                    System.out.println("Caller " + caller.getName() + " calls " + callExpr.getCalledFuncName());
                     String calleeName = key + "_" + callExpr.getCalledFuncName() + "_" + callExpr.getLineNo();
                     callee.add(calleeName);
                 }

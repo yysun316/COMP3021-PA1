@@ -253,4 +253,15 @@ public class ASTEnumOp extends ASTElement {
         }
     }
 
+
+    public static int getOpLength(ASTEnumOp op) {
+        switch (op.op) {
+            case OP_FloorDiv, OP_LShift, OP_RShift, OP_Pow, OP_Eq, OP_NotEq, OP_LtE, OP_GtE -> {
+                return 2;
+            }
+            default -> {
+                return 1;
+            }
+        }
+    }
 }

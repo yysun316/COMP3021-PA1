@@ -57,15 +57,4 @@ public class BoolOpExpr extends ASTExpr {
         return op;
     }
 
-    public void setOp(ASTEnumOp op) {
-        this.op = op;
-    }
-
-    public ArrayList<ASTExpr> getValues() {
-        return values;
-    }
-
-    public void setValues(ArrayList<ASTExpr> values) {
-        this.values = values;
-    }
 }

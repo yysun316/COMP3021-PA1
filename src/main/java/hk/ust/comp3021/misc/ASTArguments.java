@@ -18,7 +18,9 @@ public class ASTArguments extends ASTElement {
             // TODO: complete the definition of the constructor. Define the class as the subclass of ASTElement.
             super(node);
             this.arg = node.getAttribute("arg");
-            if (!node.hasAttribute("annotation"))
+            if (node.getNumChildren() == 0)
+                this.annotation = null;
+            else
                 this.annotation = ASTExpr.createASTExpr(node.getChildByIdx(0));
         }
 
@@ -41,7 +43,7 @@ public class ASTArguments extends ASTElement {
         public void printByPos(StringBuilder str) {
             // TODO: (Bonus) complete the definition of the method `printByPos`
             str.append(this.arg);
-            if (this.annotation != null){
+            if (this.annotation != null) {
                 str.append(": ");
                 this.annotation.printByPos(str);
             }
@@ -81,8 +83,8 @@ public class ASTArguments extends ASTElement {
 
 
     /*
-    * Return the number of ASTArg child nodes
-    */
+     * Return the number of ASTArg child nodes
+     */
     public int getParamNum() {
         // TODO: complete the definition of the method `getParamNum`
         return args.size();
@@ -106,9 +108,14 @@ public class ASTArguments extends ASTElement {
     @Override
     public void printByPos(StringBuilder str) {
         // TODO: (Bonus) complete the definition of the method `printByPos`
-        for (int i = 0; i < args.size(); i++){
+        int count = args.size() - defaults.size();
+        for (int i = 0; i < args.size(); i++) {
             args.get(i).printByPos(str);
-            if (i < args.size() - 1 || defaults.size() > 0)
+            if (i >= count) {
+                str.append("=");
+                defaults.get(i - count).printByPos(str);
+            }
+            if (i < args.size() - 1)
                 str.append(", ");
         }
     }

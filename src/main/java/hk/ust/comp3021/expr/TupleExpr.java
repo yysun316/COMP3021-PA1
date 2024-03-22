@@ -21,11 +21,15 @@ public class TupleExpr extends ASTExpr {
     @Override
     public void printByPos(StringBuilder str) {
         // TODO: (Bonus) complete the definition of the method `printByPos`
+        fillStartBlanks(str);
+        str.append("(".repeat(Math.max(0, this.elts.get(0).getColOffset() - this.getColOffset())));
+
         for (int i = 0; i < this.elts.size(); i++) {
             this.elts.get(i).printByPos(str);
             if (i != this.elts.size() - 1)
                 str.append(", ");
         }
+        str.append(")".repeat(Math.max(0, this.getEndColOffset() - this.elts.get(this.elts.size() - 1).getEndColOffset())));
     }
 
     @Override

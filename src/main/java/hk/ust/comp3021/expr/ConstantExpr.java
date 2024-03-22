@@ -14,8 +14,7 @@ public class ConstantExpr extends ASTExpr {
         super(node);
         this.exprType = ASTExpr.ExprType.Constant;
         this.value = node.getAttribute("value");
-        if (!node.hasAttribute("kind"))
-            this.kind = node.getAttribute("kind");
+        this.kind = node.getAttribute("kind");
     }
 
     @Override
@@ -31,13 +30,13 @@ public class ConstantExpr extends ASTExpr {
     @Override
     public void printByPos(StringBuilder str) {
         // TODO: (Bonus) complete the definition of the method `printByPos`
-        if (!isDigit(this.value) && !this.value.equals("None") && !this.value.equals("True") && !this.value.equals("False"))
+        fillStartBlanks(str);
+        if (getEndColOffset() - getColOffset() > value.length())
             str.append("'");
         str.append(this.value);
-        if (!isDigit(this.value) && !this.value.equals("None") && !this.value.equals("True") && !this.value.equals("False"))
+        if (getEndColOffset() - getColOffset() > value.length())
             str.append("'");
-        if (this.kind != null)
-            str.append(" ").append(this.kind);
+        fillEndBlanks(str);
     }
 
     /**
@@ -51,11 +50,13 @@ public class ConstantExpr extends ASTExpr {
 
     }
 
-    public static boolean isDigit(String s) {
-        for (char c : s.toCharArray()) {
-            if (!Character.isDigit(c))
-                return false;
-        }
-        return true;
+    public String getValue() {
+        String str = "";
+        if (getEndColOffset() - getColOffset() > value.length())
+            str += "'";
+        str += this.value;
+        if (getEndColOffset() - getColOffset() > value.length())
+            str += "'";
+        return str;
     }
 }

@@ -27,7 +27,9 @@ public class FunctionDefStmt extends ASTStmt {
             this.body.add(ASTStmt.createASTStmt(child));
         for (XMLNode child : node.getChildByIdx(2).getChildren())
             this.decoratorList.add(ASTExpr.createASTExpr(child));
-        if (!node.hasAttribute("returns"))
+        if (node.getAttribute("returns") != null && node.getAttribute("returns").equals("None"))
+            this.returns = null;
+        else
             this.returns = ASTExpr.createASTExpr(node.getChildByIdx(3));
     }
 
@@ -40,22 +42,22 @@ public class FunctionDefStmt extends ASTStmt {
     public ArrayList<CallExpr> getAllCalledFunc() {
         // TODO: complete the definition of the method `getAllCalledFunc`
         ArrayList<CallExpr> res = new ArrayList<>();
-        for (ASTElement child : getChildren())
-            bfs(child, res);
+        Queue<ASTElement> q = new LinkedList<>();
+        q.add(this);
+
+        while (!q.isEmpty()) {
+            ASTElement el = q.poll();
+            if (el instanceof CallExpr)
+                res.add((CallExpr) el);
+            q.addAll(el.getChildren());
+        }
+//        for (ASTElement el : getChildren())
+//            if (el instanceof CallExpr)
+//                res.add((CallExpr) el);
+
         return res;
     }
 
-    public static void bfs(ASTElement root, ArrayList<CallExpr> res) {
-        Queue<ASTElement> queue = new LinkedList<>();
-        queue.add(root);
-        while (!queue.isEmpty()) {
-            ASTElement cur = queue.poll();
-            if (cur instanceof CallExpr)
-                res.add((CallExpr) cur);
-            if (cur.getChildren() != null && !cur.getChildren().isEmpty())
-                queue.addAll(cur.getChildren());
-        }
-    }
     public int getParamNum() {
         return args.getParamNum();
     }
@@ -75,6 +77,7 @@ public class FunctionDefStmt extends ASTStmt {
             children.add(returns);
         return children;
     }
+
     @Override
     public int countChildren() {
         // TODO: complete the definition of the method `countChildren`
@@ -93,7 +96,7 @@ public class FunctionDefStmt extends ASTStmt {
         this.args.printByPos(str);
         str.append(")");
 
-        if (returns != null){
+        if (returns != null) {
             str.append(" -> ");
             returns.printByPos(str);
         }

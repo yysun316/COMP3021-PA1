@@ -16,8 +16,7 @@ public class ASTKeyWord extends ASTElement {
     public ASTKeyWord(XMLNode node) {
         // TODO: complete the definition of the constructor. Define the class as the subclass of ASTElement.
         super(node);
-        if (node.hasAttribute("arg"))
-            this.arg = node.getAttribute("arg");
+        this.arg = node.getAttribute("arg");
         this.value = ASTExpr.createASTExpr(node.getChildByIdx(0));
     }
 
@@ -43,7 +42,6 @@ public class ASTKeyWord extends ASTElement {
     @Override
     public void printByPos(StringBuilder str) {
         // TODO: (Bonus) complete the definition of the method `printByPos`
-        // 690
         if (this.arg != null)
             str.append(arg).append("=");
         value.printByPos(str);

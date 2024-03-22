@@ -33,19 +33,18 @@ public class CallExpr extends ASTExpr {
         // TODO: complete the definitaion of the method `getCalledFuncName`
         if (func instanceof NameExpr)
             return ((NameExpr) func).getId();
-        else if (func instanceof AttributeExpr) {
+        if (func instanceof AttributeExpr) {
             StringBuilder res = new StringBuilder();
             ASTElement cur = func;
-            while (!(cur instanceof NameExpr)) {
-                if (cur instanceof AttributeExpr) {
-                    res.insert(0, "." + ((AttributeExpr) cur).getAttr());
-                    cur = ((AttributeExpr) cur).getValue();
-                }
+            while (cur instanceof AttributeExpr) {
+                res.insert(0, "." + ((AttributeExpr) cur).getAttr());
+                cur = ((AttributeExpr) cur).getValue();
             }
-            res.insert(0, ((NameExpr) cur).getId());
+            if (cur instanceof NameExpr)
+                res.insert(0, ((NameExpr) cur).getId());
             return res.toString();
         }
-        return null;
+        return "";
     }
 
     @Override

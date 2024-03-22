@@ -37,11 +37,28 @@ public class BinOpExpr extends ASTExpr {
     @Override
     public void printByPos(StringBuilder str) {
         // TODO: (Bonus) complete the definition of the method `printByPos`
+        fillStartBlanks(str);
+        int brankets = this.left.getColOffset() - this.getColOffset();
+        if (this.left.getColOffset() > this.getColOffset())
+            str.append("(".repeat(this.left.getColOffset() - this.getColOffset()));
         this.left.printByPos(str);
-        str.append(" ");
+        if (this.left.getColOffset() > this.getColOffset())
+            str.append(")".repeat(this.left.getColOffset() - this.getColOffset()));
+
+        int oplength = ASTEnumOp.getOpLength(this.op);
+        int spaces = (this.right.getColOffset() - this.left.getEndColOffset() - oplength - brankets) / 2;
+        if (spaces > 0)
+            str.append(" ".repeat(spaces));
         this.op.printByPos(str);
-        str.append(" ");
+        if (spaces > 0)
+            str.append(" ".repeat(spaces));
+
+        if (this.getEndColOffset() > this.right.getEndColOffset())
+            str.append("(".repeat(this.getEndColOffset() - this.right.getEndColOffset()));
         this.right.printByPos(str);
+        if (this.getEndColOffset() > this.right.getEndColOffset())
+            str.append(")".repeat(this.getEndColOffset() - this.right.getEndColOffset()));
+        fillEndBlanks(str);
     }
 
     /**
@@ -55,27 +72,9 @@ public class BinOpExpr extends ASTExpr {
 
     }
 
-    public ASTExpr getLeft() {
-        return left;
-    }
-
-    public void setLeft(ASTExpr left) {
-        this.left = left;
-    }
 
     public ASTEnumOp getOp() {
         return op;
     }
 
-    public void setOp(ASTEnumOp op) {
-        this.op = op;
-    }
-
-    public ASTExpr getRight() {
-        return right;
-    }
-
-    public void setRight(ASTExpr right) {
-        this.right = right;
-    }
 }

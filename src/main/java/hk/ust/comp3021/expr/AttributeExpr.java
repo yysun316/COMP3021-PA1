@@ -64,16 +64,4 @@ public class AttributeExpr extends ASTExpr {
     public String getAttr() {
         return attr;
     }
-
-    public void setAttr(String attr) {
-        this.attr = attr;
-    }
-
-    public ASTEnumOp getCtx() {
-        return ctx;
-    }
-
-    public void setCtx(ASTEnumOp ctx) {
-        this.ctx = ctx;
-    }
 }
